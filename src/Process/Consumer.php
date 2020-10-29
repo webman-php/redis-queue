@@ -14,9 +14,8 @@
 
 namespace Webman\RedisQueue\Process;
 
-use Webman\App;
+use support\bootstrap\Container;
 use Webman\RedisQueue\Bootstrap\RedisQueue;
-use Webman\RedisQueue\Consumer as ConsumeInterface;
 
 /**
  * Class Consumer
@@ -53,8 +52,8 @@ class Consumer
             $ext = $fileinfo->getExtension();
             if ($ext === 'php') {
                 $class = str_replace('/', "\\", substr(substr($file, strlen(base_path())), 0, -4));
-                if ($class instanceof ConsumeInterface) {
-                    $consumer = App::container()->get($class);
+                if (is_a($class, 'Webman\RedisQueue\Consumer', true)) {
+                    $consumer = Container::get($class);
                     $connection_name = $consumer->connection ?? 'default';
                     $queue = $consumer->queue;
                     $connection = RedisQueue::connection($connection_name);
