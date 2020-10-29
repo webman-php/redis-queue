@@ -15,7 +15,7 @@
 namespace Webman\RedisQueue\Process;
 
 use support\bootstrap\Container;
-use Webman\RedisQueue\Bootstrap\RedisQueue;
+use Webman\RedisQueue\Client;
 
 /**
  * Class Consumer
@@ -56,7 +56,7 @@ class Consumer
                     $consumer = Container::get($class);
                     $connection_name = $consumer->connection ?? 'default';
                     $queue = $consumer->queue;
-                    $connection = RedisQueue::connection($connection_name);
+                    $connection = Client::connection($connection_name);
                     $connection->subscribe($queue, [$consumer, 'consume']);
                 }
             }
