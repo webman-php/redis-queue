@@ -20,7 +20,7 @@ use Workerman\RedisQueue\Client as RedisClient;
  * @package support
  *
  * Strings methods
- * @method static void send($queue, $body, array $headers = [])
+ * @method static void send($queue, $data, $delay=0)
  */
 class Client
 {
