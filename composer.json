@@ -2,6 +2,7 @@
   "name": "webman/redis-queue",
   "description": "Message queue system written in PHP for webman.",
   "require": {
+    "workerman/webman-framework": "^1.2",
     "workerman/redis-queue": "^1.0"
   },
   "autoload": {
