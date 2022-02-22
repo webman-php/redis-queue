@@ -1,6 +1,6 @@
 {
   "name": "webman/redis-queue",
-  "description": "Message queue system written in PHP for webman.",
+  "description": "Redis message queue plugin for webman.",
   "require": {
     "workerman/webman-framework": "^1.2",
     "workerman/redis-queue": "^1.0"
