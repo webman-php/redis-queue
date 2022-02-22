@@ -42,6 +42,10 @@ class Consumer
      */
     public function onWorkerStart()
     {
+        if (!is_dir($this->_consumerDir)) {
+            echo "Consumer directory {$this->_consumerDir} not exists\r\n";
+            return;
+        }
         $dir_iterator = new \RecursiveDirectoryIterator($this->_consumerDir);
         $iterator = new \RecursiveIteratorIterator($dir_iterator);
         foreach ($iterator as $file) {

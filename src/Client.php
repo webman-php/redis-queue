@@ -36,7 +36,7 @@ class Client
      */
     public static function connection($name = 'default') {
         if (!isset(static::$_connections[$name])) {
-            $config = config('redis_queue', []);
+            $config = config('redis_queue', config('plugin.webman.redis-queue.redis', []));
             if (!isset($config[$name])) {
                 throw new \RuntimeException("RedisQueue connection $name not found");
             }
