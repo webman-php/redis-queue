@@ -12,7 +12,7 @@ use Webman\Console\Util;
 
 class MakeConsumerCommand extends Command
 {
-    protected static $defaultName = 'redis:consumer';
+    protected static $defaultName = 'redis-queue:consumer';
     protected static $defaultDescription = 'Make redis-queue consumer';
 
     /**
@@ -33,11 +33,18 @@ class MakeConsumerCommand extends Command
         $name = $input->getArgument('name');
         $output->writeln("Make consumer $name");
 
+        $path = '';
+        $namespace = 'app\\queue\\redis';
+        if ($pos = strrpos($name, DIRECTORY_SEPARATOR)) {
+            $path = substr($name, 0, $pos + 1);
+            $name = substr($name, $pos + 1);
+            $namespace .= '\\' . str_replace(DIRECTORY_SEPARATOR, '\\', trim($path, DIRECTORY_SEPARATOR));
+        }
         $class = Util::nameToClass($name);
         $queue = Util::classToName($name);
 
-        $file = app_path() . "/queue/redis/$class.php";
-        $this->createConsumer($class, $queue, $file);
+        $file = app_path() . "/queue/redis/{$path}$class.php";
+        $this->createConsumer($namespace, $class, $queue, $file);
 
         return self::SUCCESS;
     }
@@ -48,7 +55,7 @@ class MakeConsumerCommand extends Command
      * @param $file
      * @return void
      */
-    protected function createConsumer($class, $queue, $file)
+    protected function createConsumer($namspace, $class, $queue, $file)
     {
         $path = pathinfo($file, PATHINFO_DIRNAME);
         if (!is_dir($path)) {
@@ -57,7 +64,7 @@ class MakeConsumerCommand extends Command
         $controller_content = <<<EOF
 <?php
 
-namespace app\\queue\\redis;
+namespace $namspace;
 
 use Webman\\RedisQueue\\Consumer;
 
