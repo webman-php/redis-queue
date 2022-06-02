@@ -53,21 +53,15 @@ class Redis
         
         $redis = new RedisConnection();
         $address = $config['host'];
-        $host = parse_url($address, PHP_URL_HOST);
-        $port = parse_url($address, PHP_URL_PORT);
-        if (false === $redis->connect($host, $port, $config['options']['timeout'] ?? 1)) {
-            throw new \RuntimeException("Redis connect $host:$port fail.");
-        }
-        if (!empty($config['auth'])) {
-            $redis->auth($config['auth']);
-        }
-        $db = $config['options']['database'] ?? $config['options']['db'] ?? 0;
-        if ($db) {
-            $redis->select($db);
-        }
-        Timer::add($config['options']['ping'] ?? 55, function () use ($redis) {
-            $redis->ping();
-        });
+        $config = [
+            'host' => parse_url($address, PHP_URL_HOST),
+            'port' => parse_url($address, PHP_URL_PORT),
+            'db' => $config['options']['database'] ?? $config['options']['db'] ?? 0,
+            'auth' => $config['options']['auth'] ?? '',
+            'timeout' => $config['options']['timeout'] ?? 2,
+            'ping' => $config['options']['ping'] ?? 55,
+        ];
+        $redis->connectWithConfig($config);
         return $redis;
     }
 
