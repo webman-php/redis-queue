@@ -47,6 +47,10 @@ class Redis
 
     protected static function connect($config)
     {
+        if (!extension_loaded('redis')) {
+            throw new \RuntimeException('Please make sure the PHP Redis extension is installed and enabled.');
+        }
+        
         $redis = new RedisConnection();
         $address = $config['host'];
         $host = parse_url($address, PHP_URL_HOST);
