@@ -14,6 +14,7 @@
 namespace Webman\RedisQueue;
 
 use Workerman\Timer;
+use Workerman\Worker;
 
 class RedisConnection extends \Redis
 {
@@ -41,7 +42,7 @@ class RedisConnection extends \Redis
         if (!empty($this->config['db'])) {
             $this->select($this->config['db']);
         }
-        if (!$timer) {
+        if (Worker::getAllWorkers() && !$timer) {
             $timer = Timer::add($this->config['ping'] ?? 55, function ()  {
                 $this->execCommand('ping');
             });
