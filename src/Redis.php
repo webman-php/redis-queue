@@ -50,7 +50,7 @@ class Redis
         if (!extension_loaded('redis')) {
             throw new \RuntimeException('Please make sure the PHP Redis extension is installed and enabled.');
         }
-        
+
         $redis = new RedisConnection();
         $address = $config['host'];
         $config = [
@@ -60,6 +60,7 @@ class Redis
             'auth' => $config['options']['auth'] ?? '',
             'timeout' => $config['options']['timeout'] ?? 2,
             'ping' => $config['options']['ping'] ?? 55,
+            'prefix' => $config['options']['prefix'] ?? '',
         ];
         $redis->connectWithConfig($config);
         return $redis;

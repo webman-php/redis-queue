@@ -19,7 +19,7 @@ use Workerman\Worker;
 class RedisConnection extends \Redis
 {
     /**
-     * @var array 
+     * @var array
      */
     protected $config = [];
 
@@ -41,6 +41,9 @@ class RedisConnection extends \Redis
         }
         if (!empty($this->config['db'])) {
             $this->select($this->config['db']);
+        }
+        if (!empty($this->config['prefix'])) {
+            $this->setOption(\Redis::OPT_PREFIX, $this->config['prefix']);
         }
         if (Worker::getAllWorkers() && !$timer) {
             $timer = Timer::add($this->config['ping'] ?? 55, function ()  {
