@@ -86,7 +86,7 @@ class RedisConnection extends \Redis
         $package_str = json_encode([
             'id'       => time().rand(),
             'time'     => $now,
-            'delay'    => 0,
+            'delay'    => $delay,
             'attempts' => 0,
             'queue'    => $queue,
             'data'     => $data
