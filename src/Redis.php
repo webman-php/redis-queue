@@ -20,7 +20,7 @@ use Workerman\Timer;
  * @package support
  *
  * Strings methods
- * @method static void send($queue, $data, $delay=0)
+ * @method static bool send($queue, $data, $delay=0)
  */
 class Redis
 {
