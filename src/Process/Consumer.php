@@ -64,11 +64,13 @@ class Consumer
                     $connection = Client::connection($connection_name);
                     $connection->subscribe($queue, [$consumer, 'consume']);
                     //Add onConsumeFailure method to Consumer class in Consumer.php
-                    $connection->onConsumeFailure(function () use ($consumer) {
-                        if (method_exists($consumer, 'onConsumeFailure')) {
-                            call_user_func([$consumer, 'onConsumeFailure']);
-                        }
-                    });
+                    if (method_exists($connection, 'onConsumeFailure')) {
+                        $connection->onConsumeFailure(function () use ($consumer) {
+                            if (method_exists($consumer, 'onConsumeFailure')) {
+                                call_user_func([$consumer, 'onConsumeFailure']);
+                            }
+                        });
+                    }
                 }
             }
         }
