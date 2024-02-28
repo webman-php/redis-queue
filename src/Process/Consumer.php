@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of webman.
  *
@@ -28,6 +27,11 @@ class Consumer
      * @var string
      */
     protected $_consumerDir = '';
+
+    /**
+     * @var array
+     */
+    protected $_consumers = [];
 
     /**
      * StompConsumer constructor.
@@ -61,18 +65,20 @@ class Consumer
                     $consumer = Container::get($class);
                     $connection_name = $consumer->connection ?? 'default';
                     $queue = $consumer->queue;
+                    $this->_consumers[$queue] = $consumer;
                     $connection = Client::connection($connection_name);
                     $connection->subscribe($queue, [$consumer, 'consume']);
-                    //Add onConsumeFailure method to Consumer class in Consumer.php
                     if (method_exists($connection, 'onConsumeFailure')) {
-                        $connection->onConsumeFailure(function ($package) use ($consumer) {
-                            if (method_exists($consumer, 'onConsumeFailure')) {
-                                call_user_func([$consumer, 'onConsumeFailure'], $package);
+                        $connection->onConsumeFailure(function ($exeption, $package) {
+                            $consumer = $this->_consumers[$package['queue']] ?? null;
+                            if ($consumer && method_exists($consumer, 'onConsumeFailure')) {
+                                call_user_func([$consumer, 'onConsumeFailure'], $exeption, $package);
                             }
                         });
                     }
                 }
             }
         }
+
     }
 }
