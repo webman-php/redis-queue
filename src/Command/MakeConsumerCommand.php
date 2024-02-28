@@ -82,13 +82,7 @@ class $class implements Consumer
         // 无需反序列化
         var_export(\$data);
     }
-
-    // 消费失败
-    public function onConsumeFailure(\$package)
-    {
-        // 无需反序列化
-        var_export(\$package);
-    }
+            
 }
 
 EOF;
