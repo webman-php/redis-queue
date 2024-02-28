@@ -14,7 +14,7 @@
 
 namespace Webman\RedisQueue\Process;
 
-use support\Container;
+use support\bootstrap\Container;
 use Webman\RedisQueue\Client;
 
 /**
