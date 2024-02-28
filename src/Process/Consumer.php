@@ -64,7 +64,6 @@ class Consumer
                     $connection = Client::connection($connection_name);
                     $connection->subscribe($queue, [$consumer, 'consume']);
                     //Add onConsumeFailure method to Consumer class in Consumer.php
-                    // 设置失败处理函数
                     $connection->onConsumeFailure(function () use ($consumer) {
                         if (method_exists($consumer, 'onConsumeFailure')) {
                             call_user_func([$consumer, 'onConsumeFailure']);
