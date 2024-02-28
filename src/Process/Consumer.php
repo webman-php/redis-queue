@@ -72,7 +72,7 @@ class Consumer
                         $connection->onConsumeFailure(function ($exeption, $package) {
                             $consumer = $this->_consumers[$package['queue']] ?? null;
                             if ($consumer && method_exists($consumer, 'onConsumeFailure')) {
-                                call_user_func([$consumer, 'onConsumeFailure'], $exeption, $package);
+                                return call_user_func([$consumer, 'onConsumeFailure'], $exeption, $package);
                             }
                         });
                     }
