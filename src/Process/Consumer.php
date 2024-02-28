@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of webman.
  *
@@ -62,9 +63,12 @@ class Consumer
                     $queue = $consumer->queue;
                     $connection = Client::connection($connection_name);
                     $connection->subscribe($queue, [$consumer, 'consume']);
+                    //Add onConsumeFailure method to Consumer class in Consumer.php
+                    if (method_exists($consumer, 'onConsumeFailure') && method_exists($connection, 'onConsumeFailure')) {
+                        $connection->onConsumeFailure([$consumer, 'onConsumeFailure']);
+                    }
                 }
             }
         }
-
     }
 }
