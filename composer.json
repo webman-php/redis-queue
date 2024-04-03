@@ -2,7 +2,7 @@
   "name": "webman/redis-queue",
   "description": "Redis message queue plugin for webman.",
   "require": {
-    "workerman/redis-queue": "^1.0"
+    "workerman/redis-queue": "^1.2"
   },
   "autoload": {
     "psr-4": {"Webman\\RedisQueue\\": "./src"}
