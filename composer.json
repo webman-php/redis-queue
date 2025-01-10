@@ -2,7 +2,11 @@
   "name": "webman/redis-queue",
   "description": "Redis message queue plugin for webman.",
   "require": {
-    "workerman/redis-queue": "^1.2"
+    "php": ">=8.1",
+    "workerman/redis-queue": "^1.2",
+    "workerman/webman": "^2.0",
+    "webman/coroutine": "^1.0 || dev-main",
+    "ext-redis": "*"
   },
   "autoload": {
     "psr-4": {"Webman\\RedisQueue\\": "./src"}
