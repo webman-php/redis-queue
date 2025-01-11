@@ -65,7 +65,7 @@ class Redis
             } finally {
                 Context::onDestroy(function () use ($connection, $name) {
                     try {
-                        static::$pools[$name]->put($connection);
+                        $connection && static::$pools[$name]->put($connection);
                     } catch (Throwable) {
                         // ignore
                     }
