@@ -13,8 +13,8 @@
  */
 namespace Webman\RedisQueue;
 
+use RedisException;
 use Webman\Context;
-use Workerman\Coroutine\Coroutine;
 use Workerman\Coroutine\Pool;
 
 /**
@@ -64,7 +64,7 @@ class Redis
                 $connection = static::$pools[$name]->get();
                 Context::set($key, $connection);
             } finally {
-                Coroutine::defer(function () use ($connection, $name) {
+                Context::onDestroy(function () use ($connection, $name) {
                     try {
                         $connection && static::$pools[$name]->put($connection);
                     } catch (Throwable) {
@@ -76,7 +76,14 @@ class Redis
         return $connection;
     }
 
-    protected static function connect($config)
+    /**
+     * Connect to redis.
+     *
+     * @param $config
+     * @return RedisConnection
+     * @throws RedisException
+     */
+    protected static function connect($config): RedisConnection
     {
         if (!extension_loaded('redis')) {
             throw new \RuntimeException('Please make sure the PHP Redis extension is installed and enabled.');
