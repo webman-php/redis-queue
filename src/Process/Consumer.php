@@ -16,6 +16,7 @@
 namespace Webman\RedisQueue\Process;
 
 use support\Container;
+use support\Context;
 use Webman\RedisQueue\Client;
 
 /**
@@ -72,7 +73,16 @@ class Consumer
                     }
                     $this->_consumers[$queue] = $consumer;
                     $connection = Client::connection($connection_name);
-                    $connection->subscribe($queue, [$consumer, 'consume']);
+                    $consumer_func = function ($message) use ($consumer) {
+                        try {
+                            $consumer->consume($message);
+                        } catch (\Throwable $e) {
+                            return throw $e;
+                        } finally {
+                            Context::destroy();
+                        }
+                    };
+                    $connection->subscribe($queue, $consumer_func);
                     if (method_exists($connection, 'onConsumeFailure')) {
                         $connection->onConsumeFailure(function ($exeption, $package) {
                             $consumer = $this->_consumers[$package['queue']] ?? null;
