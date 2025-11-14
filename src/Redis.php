@@ -91,7 +91,7 @@ class Redis
         $redis = new RedisConnection();
         $address = $config['host'];
         $config = [
-            'host' => parse_url($address, PHP_URL_HOST),
+            'host' => str_starts_with($address, 'unix:///') ? $address : parse_url($address, PHP_URL_HOST),
             'port' => parse_url($address, PHP_URL_PORT),
             'db' => $config['options']['database'] ?? $config['options']['db'] ?? 0,
             'auth' => $config['options']['auth'] ?? '',
